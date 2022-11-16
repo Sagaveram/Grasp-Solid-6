@@ -31,6 +31,11 @@ namespace Full_GRASP_And_SOLID
             printer.PrintRecipe(recipe);
             printer = new FilePrinter();
             printer.PrintRecipe(recipe);
+            System.Console.WriteLine(recipe.GetCookTime());
+            recipe.Cook();
+            
+            
+        
         }
 
         private static void PopulateCatalogs()
@@ -74,5 +79,7 @@ namespace Full_GRASP_And_SOLID
             var query = from Equipment equipment in equipmentCatalog where equipment.Description == description select equipment;
             return query.FirstOrDefault();
         }
+
+        
     }
 }

@@ -16,6 +16,9 @@ namespace Full_GRASP_And_SOLID
 
         public Product FinalProduct { get; set; }
 
+        
+        public bool Cooked{get;private set;}=false;
+        
         // Agregado por Creator
         public void AddStep(Product input, double quantity, Equipment equipment, int time)
         {
@@ -62,5 +65,43 @@ namespace Full_GRASP_And_SOLID
 
             return result;
         }
+
+        //Retorna la suma del tiempo de todos los pasos
+        // Agregado por Expert
+        public int GetCookTime()
+        {
+            int tiempoTotal=0;
+            foreach (BaseStep step in this.steps)
+            {
+                tiempoTotal=tiempoTotal+step.Time;
+    
+            }
+            return tiempoTotal;
+
+        }
+        //Expert, método que ayuda a pasar cook a True ya que esta proprertie es de solo lectura
+        public void CookedTrue()
+        {
+            Cooked=true;
+        }
+        
+        //Se utiliza el patrón Adapter para modificar la clase
+        //Se encuentra este método en Recipie por Expert
+        public void Cook()
+        {
+            int tiempoCoccion=GetCookTime();
+            TimerAdapter timerAdapter=new TimerAdapter();
+            timerAdapter.recipe=this;
+            CountdownTimer countdownTimer=new CountdownTimer();
+            countdownTimer.Register(tiempoCoccion,timerAdapter);
+            timerAdapter.TimeOut();
+                
+        }
+
+        //Agregar una propiedad bool Cooked de sólo lectura; 
+        //es false al inicio y pasa a true cuando se invoca void Cook() y pasa el tiempo indicado por GetCookTime()
+        //Agregar un método void Cook(). Usando la clase CountdownTimer provista,
+        // debe pasar la propiedad Cooked a true cuando pase el tiempo indicado por GetCookTime()
+        
     }
 }
